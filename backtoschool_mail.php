@@ -37,7 +37,7 @@ echo  "<tr><td  style='border-collapse: collapse;  border: 1px solid black;'>".$
 
 
 
-$to  ='fireskycc@gmail.com';
+$to  ='test@gmail.com';
 
 $subject ="Message from ".$name;
 $message ="Name: ".$name."\r\n";
@@ -102,7 +102,7 @@ echo "window.alert('Your Message has been sent Successfully.Thanks...')";
 echo "</script>";
 
 
-//echo "<meta http-equiv='refresh' content='1; url=http://www.restorationccva.org/backtoschool.org'>";
+
 
   
 
