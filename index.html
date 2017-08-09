@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+ <script>
+$(function() {
+        var scntDiv = $('#p_scents');
+        var i = $('#p_scents p').size() + 1;
+        
+        $('#addScnt').live('click', function() {
+                $('<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt[]" value="" placeholder="Name" /></label><label for="p_scnts_age"><input type="text" id="p_scnt_age" size="20" name="p_scnt_age[]" value="" placeholder="Age" /></label><label for="p_scnts_grate"><input type="text" id="p_scnt_grate" size="20" name="p_scnt_grate[]" value="" placeholder="Grade" /></label> <a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
+                i++;
+                return false;
+        });
+        
+        $('#remScnt').live('click', function() { 
+                if( i > 2 ) {
+                        $(this).parents('p').remove();
+                        i--;
+                }
+                return false;
+        });
+		});
+        </script>
+        <style>
+		* { font-family:Arial; }
+h2 { padding:0 0 5px 5px; }
+h2 a { color: #224f99; }
+a { color:#999; text-decoration: none; }
+a:hover { color:#802727; }
+p { padding:0 0 5px 0; }
+
+input { padding:5px; border:1px solid #999; border-radius:4px; -moz-border-radius:4px; -web-kit-border-radius:4px; -khtml-border-radius:4px; }
+		</style>
+<script>
+function topvalidateform()
+	{
+		
+		  var nameReg = /^[A-Za-z\s]+$/;
+    var numberReg =  /^[0-9]+$/;
+
+		
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+		var name=document.forms["bannerform"]["name"].value;
+		
+		var email=document.forms["bannerform"]["email"].value;
+				var phone=document.forms["bannerform"]["phone"].value;
+
+		
+		var error="";
+		if (name==null || name=="")
+		{
+			error += "Please Enter the Name\n";
+		}
+		 else if(!nameReg.test(name)){
+			error += "Please Enter Alphabets Only\n";
+        }
+		
+		if (email==null || email=="")
+		{
+			error += "Please Enter the Email address\n";
+		}
+		else if(!emailReg.test(email)){
+			error += "Please Enter the Valid Email address\n";
+        }
+
+		if (phone==null || phone=="")
+		{
+			error += "Please Enter the phone Number\n";
+		}
+		 else if(!numberReg.test(phone)){
+			error += "Please Enter only in digital\n";
+        } 
+		
+		
+		if (error!="")
+		{
+			var start = "Please clear the following errors:\n"
+			window.alert(start+error);
+
+			return false;
+		}
+		return true;
+	}
+	//-->
+	</script>
+</head>
+
+<body>
+
+
+<form action="http://localhost:8888/rcc-form/backtoschool_mail.php" method="POST" enctype="multipart/form-data" name="bannerform" onsubmit="return topvalidateform();">
+                    <div class="event-row">	
+                    <label>Name of Adults Attending*</label>
+                    <input type="text" name="name" id="name" placeholder="" >
+                    </div>
+                    <div class="event-row">
+                    <label>Email Address*</label>
+                    <input type="email" name="email" id="email" placeholder="" >
+                    </div> 
+                    <div class="event-row">
+                    <label>Phone Number*</label>
+                    <input type="tel" name="number" id="number" placeholder=""  pattern="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$">
+                    </div>
+                    
+                    
+                    <div class="event-row len-label">	
+                    <label>How Many Youth Do You Have Attending Between the Ages of 6-9?</label>
+                    <input type="number" name="register_one" id="register_one" placeholder="Number of Persons" >
+                    </div>
+                    <div class="event-row len-label">	
+                    <label>How Many Youth Do You Have Attending Between the Ages of 10-12? </label>
+                    <input type="number" name="register_two" id="register_two" placeholder="Number of Persons" >
+                    </div>
+                    <div class="event-row len-label">	
+                    <label>How Many Youth Do You Have Attending Between the Ages of 13-18? </label>
+                    <input type="number" name="register_three" id="register_three" placeholder="Number of Persons" >
+                    </div>
+                    
+                  
+
+<div id="p_scents">
+    <p>
+        <label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt[]" value="" placeholder="Name" /></label> 
+        <label for="p_scnts_age"><input type="text" id="p_scnt_age" size="20" name="p_scnt_age[]" value="" placeholder="Age" /></label>
+        <label for="p_scnts_genter"><input type="text" id="p_scnt_grate" size="20" name="p_scnt_grate[]" value="" placeholder="Grate" /></label> 
+   <a href="#" id="addScnt">+</a>  </p>
+</div>
+                    
+                    <div class="event-row len-label">
+                    <label> Are “Back to School Supplies” Needed for The Youth? </label>
+                    <input type="radio" name="school" value="yes" > YES<br>
+  <input type="radio" name="school" value="no"> NO
+  </div>
+                    <div class="event-row len-label">	
+                    
+                    <label>What challenges do you have as it pertains to parenting? </label>
+                    <textarea rows="4" cols="50" name="challenges" id="challenges" placeholder=""></textarea>
+                    
+                    <br>
+                    </div>
+                    <div class="event-row len-label">	
+                    <label>What questions would you like addressed during the Parent’s Workshop?   </label>
+                    <textarea rows="4" cols="50" name="questions" id="questions" placeholder=""></textarea>
+                    
+                    <br>
+                    </div>
+                    <div class="submit-section-full">
+                       <div class="submit-section" style="float:right;">
+                            <span class="book-now-icon"></span>
+                    
+                            <button type="submit" name="submit_but" value="submit" id="submit_but">Book Now</button>
+                       </div>
+                    </div>
+                    </form>
+</body>
+</html>
