@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<!--<script>
+function topvalidateform()
+	{
+		
+		  var nameReg = /^[A-Za-z\s]+$/;
+    var numberReg =  /^[0-9]+$/;
+
+		
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+	
+		var name=document.forms["bannerform"]["name"].value;
+		
+		var email=document.forms["bannerform"]["email"].value;
+				var phone=document.forms["bannerform"]["phone"].value;
+chosen = ""
+len = document.bannerform.exper.length
+
+for (i = 0; i <len; i++) {
+if (document.bannerform.exper[i].checked) {
+chosen = document.bannerform.exper[i].value
+}
+}
+		
+		var error="";
+		if (name==null || name=="")
+		{
+			error += "Name cannot be empty\n";
+		}
+		 else if(!nameReg.test(name)){
+			error += "Alphabets Only\n";
+        }
+		
+		if (email==null || email=="")
+		{
+			error += "Email cannot be empty\n";
+		}
+		else if(!emailReg.test(email)){
+			error += "ValidEmail cannot be empty\n";
+        }
+
+		if (phone==null || phone=="")
+		{
+			error += "phone cannot be empty\n";
+		}
+		 else if(!numberReg.test(phone)){
+			error += "only in digital\n";
+        } 
+		if (chosen == "") {
+		error += "No Option selected\n";
+		}
+		
+		
+		if (error!="")
+		{
+			var start = "Please clear the following errors:\n"
+			window.alert(start+error);
+
+			return false;
+		}
+		return true;
+	}
+
+	</script>-->
+</head>
+
+<body>
+<!--<form   method="post" action="" onSubmit="return topvalidateform();"  name="bannerform"  >
+-->
+
+
+
+<!-- Display submission status -->
+<?php /*?><?php if(!empty($statusMsg)){ ?>
+    <p class="statusMsg <?php echo !empty($msgClass)?$msgClass:''; ?>"><?php echo $statusMsg; ?></p>
+<?php } ?><?php */?>
+
+<!-- Display contact form -->
+<form method="post" action="" enctype="multipart/form-data">
+    <div class="form-group">
+        <input type="text" name="name" class="form-control"  placeholder="Name*" required="">
+    </div>
+    <div class="form-group">
+        <input type="email" name="email" class="form-control" placeholder="E-mail*" required="">
+    </div>
+     <div class="form-group">
+    <select name="exper" required>
+<option value="" disabled selected>Experience*</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+</div>
+    <div class="form-group">
+        <input type="text" name="phone" class="form-control"  placeholder="Phone*" required="">
+    </div>
+     <div class="form-group">
+        <input type="file" name="attachment" class="form-control" required="">
+    </div>
+    <div class="form-group">
+        <input type="text" name="notice" class="form-control" placeholder="Notice Period">
+    </div>
+   
+    <div class="submit">
+        <input type="submit" name="submit" class="btn" value="SUBMIT">
+    </div>
+</form>
+
+<?php
+$postData = $uploadedFile = $statusMsg = '';
+$msgClass = 'errordiv';
+if(isset($_POST['submit'])){
+    // Get the submitted form data
+    $postData = $_POST;
+    $email = $_POST['email'];
+    $name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $notice = $_POST['notice'];
+	 $exper=$_POST['exper'];
+    
+    // Check whether submitted data is not empty
+    if(!empty($email) && !empty($name) && !empty($phone) && !empty($exper)){
+        
+        // Validate email
+        if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
+			echo "<script>";
+echo "window.alert('Please enter your valid email.')";
+echo "</script>";
+            //statusMsg = 'Please enter your valid email.';
+        }else{
+            $uploadStatus = 1;
+            
+            // Upload attachment file
+            if(!empty($_FILES["attachment"]["name"])){
+                
+                // File path config
+                $targetDir = "uploads/";
+                $fileName = basename($_FILES["attachment"]["name"]);
+                $targetFilePath = $targetDir . $fileName;
+                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+                
+                // Allow certain file formats
+                $allowTypes = array('doc', 'docx');
+                if(in_array($fileType, $allowTypes)){
+                    // Upload file to the server
+                    if(move_uploaded_file($_FILES["attachment"]["tmp_name"], $targetFilePath)){
+                        $uploadedFile = $targetFilePath;
+                    }else{
+                        $uploadStatus = 0;
+						echo "<script>";
+echo "window.alert('Sorry, there was an error uploading your file.)";
+echo "</script>";
+                       
+                    }
+                }else{
+                    $uploadStatus = 0;
+					echo "<script>";
+echo "window.alert('Sorry, only DOC files are allowed to upload.')";
+echo "</script>";
+                  
+                }
+            }
+            
+            if($uploadStatus == 1){
+                
+                // Recipient
+                $toEmail = 'ersangeethacs@gmail.com';
+
+                // Sender
+                $from = $email;
+                $fromName = 'Application Form - Firesky';
+                
+                // Subject
+                $emailSubject = 'Application Form Submitted by '.$name;
+                
+                // Message 
+                $htmlContent = '<h2>Contact Request Submitted</h2>
+                    <p><b>Name:</b> '.$name.'</p>
+                    <p><b>Email:</b> '.$email.'</p>
+                    <p><b>Phone:</b> '.$phone.'</p>
+					 <p><b>Experience:</b> '.$exper.'</p>
+                    <p><b>Notice Period:</b><br/>'.$notice.'</p>';
+                
+                // Header for sender info
+                $headers = "From: $fromName"." <".$from.">";
+
+                if(!empty($uploadedFile) && file_exists($uploadedFile)){
+                    
+                    // Boundary 
+                    $semi_rand = md5(time()); 
+                    $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
+                    
+                    // Headers for attachment 
+                    $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
+                    
+                    // Multipart boundary 
+                    $message = "--{$mime_boundary}\n" . "Content-Type: text/html; charset=\"UTF-8\"\n" .
+                    "Content-Transfer-Encoding: 7bit\n\n" . $htmlContent . "\n\n"; 
+                    
+                    // Preparing attachment
+                    if(is_file($uploadedFile)){
+                        $message .= "--{$mime_boundary}\n";
+                        $fp =    @fopen($uploadedFile,"rb");
+                        $data =  @fread($fp,filesize($uploadedFile));
+                        @fclose($fp);
+                        $data = chunk_split(base64_encode($data));
+                        $message .= "Content-Type: application/octet-stream; name=\"".basename($uploadedFile)."\"\n" . 
+                        "Content-Description: ".basename($uploadedFile)."\n" .
+                        "Content-Disposition: attachment;\n" . " filename=\"".basename($uploadedFile)."\"; size=".filesize($uploadedFile).";\n" . 
+                        "Content-Transfer-Encoding: base64\n\n" . $data . "\n\n";
+                    }
+                    
+                    $message .= "--{$mime_boundary}--";
+                    $returnpath = "-f" . $email;
+                    
+                    // Send email
+                    $mail = mail($toEmail, $emailSubject, $message, $headers, $returnpath);
+                    
+                    // Delete attachment file from the server
+                    @unlink($uploadedFile);
+                }else{
+                     // Set content-type header for sending HTML email
+                    $headers .= "\r\n". "MIME-Version: 1.0";
+                    $headers .= "\r\n". "Content-type:text/html;charset=UTF-8";
+                    
+                    // Send email
+                    $mail = mail($toEmail, $emailSubject, $htmlContent, $headers); 
+                }
+                
+                // If mail sent
+                if($mail){
+					echo "<script>";
+echo "window.alert('Your contact request has been submitted successfully !')";
+echo "</script>";
+                 
+                   
+                }else{
+
+echo "<script>";
+echo "window.alert('Your contact request submission failed, please try again.')";
+echo "</script>";      
+           
+                }
+            }
+        }
+    }else{
+		echo "<script>";
+echo "window.alert('Please fill all the fields.')";
+echo "</script>";
+      
+    }
+}
+?>
+
+
+</body>
+</html>
